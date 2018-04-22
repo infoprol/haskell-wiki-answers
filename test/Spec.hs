@@ -1,6 +1,8 @@
-module Spec where
+module Spec
+    ( testgcd'
+    ) where
 
-import Lib
+import GCDRefactorum
 
 
 
@@ -8,7 +10,9 @@ import Lib
 testgcd' :: IO ()
 testgcd' = do
   let d = gcd' 36 28 :: Integer
-  putStrLn $ "gcd' 36 28 = " ++ (show d :: Integer)
+  putStrLn $ "gcd' 36 28 = " ++ (show d) ++ "."
+  let e = gcd' 77 847 :: Integer
+  putStrLn $ "gcd' 77 847 = " ++ (show e) ++ "."
 
 
 

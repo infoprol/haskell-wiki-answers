@@ -1,4 +1,4 @@
-module Lib
+module GCDRefactorum
     ( someFunc
     , gcd'
     , gcd''
@@ -8,8 +8,9 @@ someFunc :: IO ()
 someFunc = putStrLn "suck this forever!!"
 
 
-
--- off by fucking 1
+{--
+  special cases / terminating conditions all flim-flammed together-like.
+--}
 gcd' :: Integer -> Integer -> Integer
 gcd' m 0 = m
 gcd' 0 _ = 0
@@ -19,6 +20,10 @@ gcd' m n
   | m < n             = gcd' n m
   | m == n            = n
   | otherwise         = gcd' (m `div` n) (m `mod` n)
+
+
+
+
 
 gcd'' :: Integer -> Integer -> Integer
 gcd'' m n = 0
