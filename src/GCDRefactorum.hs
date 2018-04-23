@@ -54,22 +54,25 @@ gcd' a b    | a < 0         = gcd' (abs a) b
 (%%) x y = x `mod` y
 
  
-euclidsElems :: Integer -> Integer -> [ (Integer, Integer, Integer) ]
-euclidsElems a b = (b, q, r) : euclidsElems q r
+euclidsElems :: Integer -> Integer -> [ (Integer, Integer) ]
+euclidsElems a b = (a, b) : euclidsElems b r
     where
-        q = a // b
+        --q = a // b
         r = a %% b
 
-isAnswer :: (Integer, Integer, Integer) -> Bool
-isAnswer (_, _, r)    | r == 0    = True
-                    | otherwise = False
+isAnswer :: (Integer, Integer) -> Bool
+isAnswer (a, b)     | a %% b == 0   = True
+                    | otherwise     = False
 
-pluckAns :: (Integer, Integer, Integer) -> Integer
-pluckAns eucliment = x where (x, _, _) = eucliment
+pluckAns :: (Integer, Integer) -> Integer
+pluckAns eucliment = b where (_, b) = eucliment
 
 
 gcd'' :: Integer -> Integer -> Integer
-gcd'' a b = pluckAns $ (filter isAnswer (euclidsElems a b)) !! 0
+gcd'' a b   | a < 0         = gcd'' (abs a) b
+            | b < 0         = gcd'' a (abs b)
+            | a < b         = gcd'' b a
+            | otherwise     = pluckAns $ (filter isAnswer (euclidsElems a b)) !! 0
         
 
 
