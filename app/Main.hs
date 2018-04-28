@@ -1,6 +1,7 @@
 module Main where
-import GCDRefactorum
 
+import GCDRefactorum
+import IORThey
 
 
 testgcd' :: IO ()
@@ -15,11 +16,7 @@ testgcd' = do
 
 
 main :: IO ()
-main = do
-  putStrLn "Test suite implemented shittily."
-  testgcd'
-  putStrLn "done-yet."
-
+main = doPoetry
 
 
 xxmain :: IO ()
