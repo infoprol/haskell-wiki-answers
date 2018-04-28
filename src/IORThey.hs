@@ -1,3 +1,10 @@
+{--
+    taken from chapter 2 of <i>Haskell Design Patterns</i>
+    by Ryan Lemmer (PACKT).
+
+--}
+
+
 module IORThey
     ( doPoetry
     ) where
@@ -17,14 +24,21 @@ import Control.Applicative
 
 
 
+data Chunk  = Chunk     { chunk :: String }
+            | LineEnd   { chunk :: String, remainder :: String }
+    deriving (Show)            
 
 
 
 
 
-
-
-
+parseChunk chunk =
+    if rightS == B8.pack ""
+        then Chunk      (toS leftS)
+        else LineEnd    (toS leftS) ((toS . B8.tail) rightS)
+    where
+        (leftS, rightS) = B8.break (== '\n') chunk
+        toS = map (chr . fromEnum) . B.unpack
 
 
 
