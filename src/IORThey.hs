@@ -18,8 +18,32 @@ import Control.Applicative
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 doPoetry = do
     h <- openFile "hyperion.1.txt" ReadMode
-    hGetLine h >>= putStrLn . show . words
-    hClose h
 
+    loop h
+    hClose h
+    where
+        loop h' = do
+            isEof <- hIsEOF h'
+            if isEof
+                then putStrLn "doneyet!"
+            else
+                hGetLine h' >>= putStrLn . show . words >> loop h'
