@@ -4,6 +4,11 @@ import GCDRefactorum
 import IORThey
 
 
+
+
+
+
+
 testgcd' :: IO ()
 testgcd' = do
   let d = gcd' 36 28 :: Integer
