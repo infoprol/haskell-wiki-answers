@@ -61,6 +61,29 @@ flatten (List [])       = []
 flatten (List (x:xs))   = flatten x ++ flatten (List xs)
 
 
+-- 8
+
+f :: (Eq a) => [a] -> [a]
+f []        = []
+f (x:xs)    = foldl (\(a:acc) z -> if z == a then acc else (z:a:acc)) [x] xs
+
+
+
+compress :: (Eq a) => [a] -> [a]
+compress [] = []
+compress xs = myReverse $ loop xs []
+    where
+        loop []         acc     = acc
+        loop (x:xs)     []      = loop xs [x]
+        loop (x:xs)     (y:ys)  = loop xs (if x == y then (y:ys) else (x:y:ys))
+
+
+
+
+
+
+
+
 
 
 {--
