@@ -101,13 +101,26 @@ encodeModified = (fmap h) . pack
 
 
 -- 12
-        
+decodeModified :: Eq a => [SymbolRun a] -> [a]
+decodeModified [] = []
+decodeModified (x:xs) =
+  case x of
+    (Single c)      ->  c : (decodeModified xs)
+    (Multiple n c)  ->  fmap (const c) [ 1 .. n ] ++ decodeModified xs
 
 
-
-
-
-
+-- 13
+encodeDirect :: Eq a => [a] -> [SymbolRun a]
+encodeDirect [] = []
+encodeDirect zs = recurse zs []
+  where
+    recurse [] acc = myReverse acc
+    recurse (x:xs) [] = recurse xs [Single x]
+    recurse (x:xs)  (y:ys)  =
+      case y of
+        (Single c)          -> recurse xs (if c == x then (Multiple 2 c):ys else (Single x):y:ys)
+        (Multiple n c)      -> recurse xs (if c == x then (Multiple (n+1) c):ys else (Single x):y:ys)
+      
 
 
 
