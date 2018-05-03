@@ -67,8 +67,6 @@ f :: (Eq a) => [a] -> [a]
 f []        = []
 f (x:xs)    = foldl (\(a:acc) z -> if z == a then acc else (z:a:acc)) [x] xs
 
-
-
 compress :: (Eq a) => [a] -> [a]
 compress [] = []
 compress xs = myReverse $ loop xs []
@@ -76,6 +74,31 @@ compress xs = myReverse $ loop xs []
         loop []         acc     = acc
         loop (x:xs)     []      = loop xs [x]
         loop (x:xs)     (y:ys)  = loop xs (if x == y then (y:ys) else (x:y:ys))
+
+
+
+-- 9
+pack :: Eq a => [a] -> [[a]]
+pack [] = []
+pack xs = myReverse $ loop xs [] []
+    where
+        loop []         innAcc      outAcc  = innAcc : outAcc
+        loop (x:xs)     []          outAcc  = loop xs [x] outAcc
+        
+        loop (x:xs) (y:ys) outAcc   | x == y    = loop  xs  (x:y:ys)    outAcc
+                                    | otherwise = loop  xs  [x]         ((y:ys) : outAcc)
+
+
+
+-- 10
+encode :: Eq a => [a] -> [ (Int, a) ]
+encode = g . pack
+    where
+        g = fmap $ \(x:xs) -> ((myLength (x:xs)), x)
+
+
+
+
 
 
 
