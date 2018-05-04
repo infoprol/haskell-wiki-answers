@@ -146,54 +146,39 @@ dupli = foldr (\x xs -> x:x:xs) []
 rev :: [a] -> [a]
 rev = foldl (flip (:)) []
 
-
-
 repli :: [a] -> Int -> [a]
 repli xxs n = foldr (++) [] zzs
   where
     zzs     = fmap repl xxs
     repl x  = take n (repeat x)
 
-
 --repli xxs n = foldr (\x xs -> (take n $ repeat x) ++ xs) xxs []
-
 --repli xs n = repli (dupli xs) (n - 1)
 --repli xxs n = foldr (\x xs -> [ x | x <- 1 ... n ])
 
 
+-- 16
+{-- --}
+-- deviating from prob signature of `:: [a] -> Int -> [a]`
+--dropEvery :: Int -> [a] -> [a]
 
-
-{--
-
-
-  case head of
-    Elem x        -> x : (flatten $ List xs)
-    List xxs      -> (flatten $ List xxs) : (flatten (List xs))
-
-flatten xxs = simpleFlatten $ flatten' xxs
-    where
-      flatten' (List []) = []
-      flatten' (Elem x) = [x]
-      flatten' (List xs) = (flatten' x) : (fmap flatten' xs)
---}
-
-{--
-testFlatten :: IO ()
-testFlatten = do
---  let nn = flatten $ List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]
-  let ff = flatten $ List [ Elem 1, List [Elem 2, Elem 3], Elem 4 ]
-  putStrLn $ "flatten " ++ (show nn) ++ " ~> \n\t" ++ (show ff) ++ "." 
---}
-
-
-
-{--
-flatten xxs = loop xxs [] []
+dropEvery :: [a] -> Int -> [a]
+dropEvery xxs n = rev (recurse xxs [] [])
   where
-    loop [] innerAcc outerAcc = innerAcc : outerAcc
-    loop (head : xxs) innerAcc outerAcc =
-      case head of
-        Elem x    -> loop xss (x : innerAcc) outerAcc
-        List nnx  -> loop xss [] (
-          
---}
+    recurse []      innAcc  outAcc  = foldr (:) innAcc outAcc
+--    recurse (x:xs)  []      []      = recurse xs [x] []
+    recurse (x:xs)  innAcc  outAcc
+      | (len innAcc) < n - 1    = recurse xs (x:innAcc) outAcc
+      | otherwise               = recurse xs [] (foldr (:) innAcc outAcc)
+        
+    
+
+
+
+
+
+
+
+
+
+
