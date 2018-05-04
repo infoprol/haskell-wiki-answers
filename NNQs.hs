@@ -105,7 +105,7 @@ decodeModified :: Eq a => [SymbolRun a] -> [a]
 decodeModified [] = []
 decodeModified (x:xs) =
   case x of
-    (Single c)      ->  c : (decodeModified xs)
+    (Single c)      ->  c : decodeModified xs
     (Multiple n c)  ->  fmap (const c) [ 1 .. n ] ++ decodeModified xs
 
 
@@ -118,11 +118,47 @@ encodeDirect zs = recurse zs []
     recurse (x:xs) [] = recurse xs [Single x]
     recurse (x:xs)  (y:ys)  =
       case y of
-        (Single c)          -> recurse xs (if c == x then (Multiple 2 c):ys else (Single x):y:ys)
-        (Multiple n c)      -> recurse xs (if c == x then (Multiple (n+1) c):ys else (Single x):y:ys)
+        (Single c)      -> recurse xs (if c == x then Multiple 2 c :ys else (Single x):y:ys)
+        (Multiple n c)  -> recurse xs (if c == x then Multiple (n+1) c :ys else (Single x):y:ys)
       
+-- 14
+xdupli :: [a] -> [a]
+xdupli [] = []
+xdupli xs = recurse xs []
+  where
+    recurse []      acc = foldl (\xs x -> x:xs) [] acc
+    recurse (x:xs)  acc = recurse xs (x:x:acc)
+    
+xxdupli :: [a] -> [a]
+xxdupli = dupl . rev
+  where
+    rev = foldl (flip (:)) []
+    dupl = foldl (\xs x -> x:x:xs) []
+
+-- oh, yeah - right...
+dupli :: [a] -> [a]
+dupli = foldr (\x xs -> x:x:xs) []
 
 
+
+
+-- 15
+rev :: [a] -> [a]
+rev = foldl (flip (:)) []
+
+
+
+repli :: [a] -> Int -> [a]
+repli xxs n = foldr (++) [] zzs
+  where
+    zzs     = fmap repl xxs
+    repl x  = take n (repeat x)
+
+
+--repli xxs n = foldr (\x xs -> (take n $ repeat x) ++ xs) xxs []
+
+--repli xs n = repli (dupli xs) (n - 1)
+--repli xxs n = foldr (\x xs -> [ x | x <- 1 ... n ])
 
 
 
@@ -159,4 +195,5 @@ flatten xxs = loop xxs [] []
       case head of
         Elem x    -> loop xss (x : innerAcc) outerAcc
         List nnx  -> loop xss [] (
-          --}
+          
+--}
