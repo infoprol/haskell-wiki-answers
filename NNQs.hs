@@ -9,7 +9,7 @@ import System.IO
 --}
 
 --1
-myLast :: [a] -> a  
+myLast :: [a] -> a
 myLast [x]  = x
 myLast (x:xs) = myLast xs
 
@@ -69,7 +69,7 @@ pack xs = myReverse $ loop xs [] []
     where
         loop []         innAcc      outAcc  = innAcc : outAcc
         loop (x:xs)     []          outAcc  = loop xs [x] outAcc
-        
+
         loop (x:xs) (y:ys) outAcc   | x == y    = loop  xs  (x:y:ys)    outAcc
                                     | otherwise = loop  xs  [x]         ((y:ys) : outAcc)
 
@@ -120,7 +120,7 @@ encodeDirect zs = recurse zs []
       case y of
         (Single c)      -> recurse xs (if c == x then Multiple 2 c :ys else (Single x):y:ys)
         (Multiple n c)  -> recurse xs (if c == x then Multiple (n+1) c :ys else (Single x):y:ys)
-      
+
 -- 14
 xdupli :: [a] -> [a]
 xdupli [] = []
@@ -128,7 +128,7 @@ xdupli xs = recurse xs []
   where
     recurse []      acc = foldl (\xs x -> x:xs) [] acc
     recurse (x:xs)  acc = recurse xs (x:x:acc)
-    
+
 xxdupli :: [a] -> [a]
 xxdupli = dupl . rev
   where
@@ -166,12 +166,41 @@ dropEvery :: [a] -> Int -> [a]
 dropEvery xxs n = rev (recurse xxs [] [])
   where
     recurse []      innAcc  outAcc  = foldr (:) innAcc outAcc
---    recurse (x:xs)  []      []      = recurse xs [x] []
     recurse (x:xs)  innAcc  outAcc
-      | (len innAcc) < n - 1    = recurse xs (x:innAcc) outAcc
+      | len innAcc < n - 1      = recurse xs (x:innAcc) outAcc
       | otherwise               = recurse xs [] (foldr (:) innAcc outAcc)
-        
-    
+
+
+
+
+-- 17
+{--
+*Main> split "abcdefghik" 3
+("abc", "defghik")
+--}
+
+split :: [a] -> Int -> [[a]]
+split xs n = recurse xs n []
+  where
+    recurse []      _   acc = [rev acc, []]
+    recurse xs      0   acc = [rev acc, xs]
+    recurse (x:xs)  n   acc = recurse xs (n - 1) (x:acc)
+
+
+-- 18
+{--
+slice ['a','b','c','d','e','f','g','h','i','k'] 3 7
+-> "cdefg"
+--}
+
+slice :: [a] -> Int -> Int -> [a]
+slice xs a b = rev $ loop xs a (b - a + 1) []
+  where
+    loop [] _ _ acc = acc
+    loop (x:xs) a n acc
+      | n < 1             = acc
+      | a == 1             = loop xs 1 (n - 1) (x:acc)
+      | otherwise         = loop xs (a - 1) n acc
 
 
 
