@@ -242,6 +242,77 @@ removeAt n xs = loop n xs []
     loop _  []      acc = ( Nothing, rev acc )
     loop 1  (x:xs)  acc = ( Just x, rev acc ++ xs )
     loop n  (x:xs)  acc = loop (n - 1) xs (x:acc)
-    
-    
 
+
+
+
+
+
+{-- https://wiki.haskell.org/99_questions/21_to_28 --}
+
+
+-- 21
+  {--
+    P21> insertAt 'X' "abcd" 2
+    "aXbcd"
+  --}
+
+insertAt :: a -> [a] -> Int -> [a]
+insertAt x [] _ = [x]
+insertAt y xs n = loop y xs n []
+  where
+    loop y xs     1 acc = rev acc ++ (y:xs)
+    loop y []     _ acc = loop y [] 1 acc
+    loop y (x:xs) n acc = loop y xs (n - 1) (x:acc)
+
+
+
+
+
+-- 22
+  {--
+    Prelude> range 4 9
+      ~> [4,5,6,7,8,9]
+  --}
+
+range :: Int -> Int -> [Int]
+range a b
+  | b < a       = []
+  | otherwise   = a : range (a + 1) b
+
+
+
+
+
+-- 23
+  {--
+    Extract a given number of randomly selected elements from a list.
+      Prelude System.Random>rnd_select "abcdefgh" 3 >>= putStrLn
+        ~> eda
+  --}
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+  
+-- 24
+  {--
+    Lotto: Draw N different random numbers from the set 1..M.
+      Prelude System.Random>diff_select 6 49
+        ~> Prelude System.Random>[23,1,17,33,21,37]
+  --}
+  
+  
+-- 25
+  {--
+    Generate a random permutation of the elements of a list.
+      Prelude System.Random>rnd_permu "abcdef"
+      ~> Prelude System.Random>"badcef"
+  --}
