@@ -187,6 +187,8 @@ split xs n = recurse xs n []
     recurse (x:xs)  n   acc = recurse xs (n - 1) (x:acc)
 
 
+
+
 -- 18
 {--
 slice ['a','b','c','d','e','f','g','h','i','k'] 3 7
@@ -199,15 +201,47 @@ slice xs a b = rev $ loop xs a (b - a + 1) []
     loop [] _ _ acc = acc
     loop (x:xs) a n acc
       | n < 1             = acc
-      | a == 1             = loop xs 1 (n - 1) (x:acc)
-      | otherwise         = loop xs (a - 1) n acc
+      | a == 1            = loop xs   1         (n - 1)   (x:acc)
+      | otherwise         = loop xs   (a - 1)   n         acc
 
 
 
 
+-- 19
+  {--
+    *Main> rotate ['a','b','c','d','e','f','g','h'] 3
+    "defghabc"
+ 
+    *Main> rotate ['a','b','c','d','e','f','g','h'] (-2)
+    "ghabcdef"
+  --}
+
+rotate :: [a] -> Int -> [a]
+rotate []     _ = []
+rotate (x:xs) n
+  | n == 0    = x:xs
+  | n >  0    = rotate (xs ++ [x]) (n - 1)
+  | n <  0    = rev $ rotate (rev $ x:xs) (-1 * n)
 
 
 
 
+-- 20
+  {--
+    *Main> removeAt 2 "abcd"
+    
+      ~> ('b',"acd")
+  --}
 
+--data Maybe a = Just a | Nothing
+
+removeAt :: Int -> [a] -> ( Maybe a, [a] )
+removeAt _ [] = (Nothing, [])
+removeAt n xs = loop n xs []
+  where
+    loop _  []      acc = ( Nothing, rev acc )
+    loop 1  (x:xs)  acc = ( Just x, rev acc ++ xs )
+    loop n  (x:xs)  acc = loop (n - 1) xs (x:acc)
+    
+    
 
