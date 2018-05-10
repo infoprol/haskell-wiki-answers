@@ -291,8 +291,10 @@ range a b
         ~> eda
   --}
 
-
-
+rnd_select :: [a] -> Int -> IO [a]
+rnd_select [a] n = return $ loop [a] n []
+  where
+    loop xs n acc = xs  
 
   
   
