@@ -2,6 +2,11 @@ module NNQs where
 
 import System.IO
 
+import System.Random
+import Control.Monad (when)
+
+
+
 {-- https://wiki.haskell.org/99_questions/1_to_10 --}
 {--
     NOTE: i'm leaving the functions with incomplete defs
@@ -291,13 +296,61 @@ range a b
         ~> eda
   --}
 
-rnd_select :: [a] -> Int -> IO [a]
-rnd_select [a] n = return $ loop [a] n []
-  where
-    loop xs n acc = xs  
 
+{-- drops the nth element and returns the resulting list.  nth ZERO-BASED index--}
+all_but :: [a] -> Int -> [a]
+--all_but [] n = []
+all_but xs n = loop xs n []
+  where
+    loop []     _   acc = rev acc
+    loop (x:xs) 0   acc = rev acc ++ xs
+    loop (x:xs) n   acc = loop xs (n - 1) (x:acc)
+
+
+
+
+rnd_select :: [a] -> Int -> IO [a]
+--rnd_select []   n = return [] :: IO [a]
+--rnd_select xs   0 = return [] :: IO [a]
+rnd_select xs n = do
+  ans <- loop xs n []
+  return ans
+ 
+  where
+    loop xs n acc = do
+      let len = length xs
+      if len < 1 || n < 1
+        then return acc
+        else do
+          _ <- newStdGen
+          gen <- getStdGen
+          let (indx, _) = randomR (0, len - 1) gen :: (Int, StdGen)
+          let x = xs !! indx
+          loop (all_but xs indx) (n - 1) (x:acc)
+          
+           
+        
+      
+      
+  
+--    loop []       n gen acc = return acc
+--    loop (x:xs)   0 gen acc = return acc
+    
   
   
+
+
+{--
+rnd_select xs n | length xs < 1 || n < 1 = pure []
+                | otherwise = loop
+  where loop = do
+    r <- getStdGen
+    let (indx, nextR) = randomR (0, (length xs - 1)) r
+    setStdGen nextR
+    return ( xs !! indx ) : rnd_select $ (removeAt indx xs) (n - 1) }
+        --}
+    
+
   
 
   
