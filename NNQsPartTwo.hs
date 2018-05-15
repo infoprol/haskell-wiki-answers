@@ -30,3 +30,19 @@ diff_select n m = rnd_select (range 1 m) n
 rnd_permu :: [a] -> IO [a]
 rnd_permu xs = rnd_select xs (length xs)
 
+
+
+-- 26
+    {--
+        > combinations 3 "abcdef"
+        ["abc","abd","abe",...]
+    --}
+
+
+-- 0-based, a <= i < b (python-style) indexing
+slice' :: [a] -> Int -> Int -> [a]
+slice' xs a b = slice xs (a + 1) b
+
+
+combinations :: [a] -> Int -> [[a]]
+combinations [] 
