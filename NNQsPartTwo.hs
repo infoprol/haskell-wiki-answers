@@ -46,7 +46,7 @@ slice' xs a b = slice xs (a + 1) b
 
 powerset :: [a] -> [[a]]
 powerset []         = [[]]
-powerset (x:[])     = [ [], [x] ]
+--powerset (x:[])     = [ [], [x] ]
 powerset (x:xs)     = [ x:ys | ys <- yys ] ++ yys where yys = powerset xs
 
 
