@@ -44,5 +44,12 @@ slice' :: [a] -> Int -> Int -> [a]
 slice' xs a b = slice xs (a + 1) b
 
 
+powerset :: [a] -> [[a]]
+powerset []         = [[]]
+powerset (x:[])     = [ [], [x] ]
+powerset (x:xs)     = [ x:ys | ys <- yys ] ++ yys where yys = powerset xs
+
+
+-- CLAIM: this is not the most efficient way to do this.
 combinations :: [a] -> Int -> [[a]]
-combinations [] 
+combinations xs n = [ ys | ys <- powerset xs, length ys == n ]

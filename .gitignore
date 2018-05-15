@@ -1,3 +1,5 @@
 .stack-work/
 shitty-haskell.cabal
 *~
+*.hi
+*.o
