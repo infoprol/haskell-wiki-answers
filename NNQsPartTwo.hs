@@ -57,8 +57,6 @@ combinations :: [a] -> Int -> [[a]]
 combinations xs n = [ ys | ys <- powerset xs, length ys == n ]
 
 
-
-
 -- 27
     {--
         Group the elements of a set into disjoint subsets.
@@ -85,8 +83,12 @@ skip _ []       = []
 skip n (x:xs)   = skip (n - 1) xs
 
 
-
-
+{--
+    e.g.,
+        >partByIndex "abcdefghi" [7,1,2]
+            ~> ["bch", "adefgi"]
+            
+--}
 partByIndex :: [a] -> [Int] -> [[a]]
 partByIndex xs js = loop xs (sort js) []
     where
@@ -103,12 +105,12 @@ partByIndexOrd = fmap (fmap sort) . partByIndex
 
 
 
+
 {--
 group :: [Int] -> [a] -> [[a]]
-group sizes xs
-    | fmap (+) sizes != length xs || null xs = []
-    | otherwise = loop sizes xs
-        where
-            loop _ [] = []
-            loop (k:ks) xs = []
---}
+group [] xs = []
+group (m:ms) xs =
+    [ (picked : group ms notpicked)
+        | jj <- combinations [ 0 .. length xs - 1 ] m,
+          let [picked, notpicked] = partByIndex jj  xs ]
+        ---}
