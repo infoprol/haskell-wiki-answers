@@ -68,21 +68,33 @@ fact :: Int -> Int
 fact 0 = 1
 fact n = n * fact(n - 1)
 
+binCoeff :: Int -> Int -> Int
+binCoeff n k
+    | k > n = 0
+    | otherwise = (fact n) `div` ((fact (n-k)) * fact k)
+
+
+
+
 isAllUniq :: Eq a => [a] -> Bool
 isAllUniq [] = True
 isAllUniq (x:xs) = and $ [isAllUniq xs] ++ [ y /= x | y <- xs ]
 
 
 
-{--
+
 testCombo :: Int -> Int -> Bool
 testCombo m n
-        | fact m div fact (m - n) /= length cc = False
+        | (binCoeff m n) /= (length cc :: Int) = False
         | or $ fmap (\xx -> length xx /= n) cc = False
         | not (isAllUniq cc) = False
         | otherwise = True
-    where cc = combo m n :: [[Int]]
---}
+    where
+        cc = combo (range 1 m) n
+        
+        
+           
+
 
 
 
