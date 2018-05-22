@@ -57,6 +57,40 @@ combinations :: [a] -> Int -> [[a]]
 combinations xs n = [ ys | ys <- powerset xs, length ys == n ]
 
 
+combo :: [a] -> Int -> [[a]]
+combo [] _ = []
+combo xs 0 = []
+combo xs 1 = fmap (\x -> [x]) xs
+combo (x:xs) n = [ x : ys | ys <- combo xs (n - 1) ] ++ combo xs n
+
+
+fact :: Int -> Int
+fact 0 = 1
+fact n = n * fact(n - 1)
+
+isAllUniq :: Eq a => [a] -> Bool
+isAllUniq [] = True
+isAllUniq (x:xs) = and $ [isAllUniq xs] ++ [ y /= x | y <- xs ]
+
+
+
+{--
+testCombo :: Int -> Int -> Bool
+testCombo m n
+        | fact m div fact (m - n) /= length cc = False
+        | or $ fmap (\xx -> length xx /= n) cc = False
+        | not (isAllUniq cc) = False
+        | otherwise = True
+    where cc = combo m n :: [[Int]]
+--}
+
+
+
+
+
+
+
+
 -- 27
     {--
         Group the elements of a set into disjoint subsets.
@@ -80,7 +114,7 @@ combinations xs n = [ ys | ys <- powerset xs, length ys == n ]
 skip :: Int -> [a] -> [a]
 skip 0 xs       = xs
 skip _ []       = []
-skip n (x:xs)   = skip (n - 1) xs
+skip n (_:xs)   = skip (n - 1) xs
 
 
 {--
@@ -88,7 +122,7 @@ skip n (x:xs)   = skip (n - 1) xs
         >partByIndex "abcdefghi" [7,1,2]
             ~> ["bch", "adefgi"]
             
---}
+
 partByIndex :: [a] -> [Int] -> [[a]]
 partByIndex xs js = loop xs (sort js) []
     where
@@ -101,6 +135,8 @@ partByIndexOrd :: (Ord a) => [a] -> [Int] -> [[a]]
 --partByIndexOrd xs js = fmap sort $ partByIndex xs js
 partByIndexOrd = fmap (fmap sort) . partByIndex
 
+--}
+
 
 
 
@@ -108,9 +144,12 @@ partByIndexOrd = fmap (fmap sort) . partByIndex
 
 {--
 group :: [Int] -> [a] -> [[a]]
-group [] xs = []
-group (m:ms) xs =
-    [ (picked : group ms notpicked)
-        | jj <- combinations [ 0 .. length xs - 1 ] m,
-          let [picked, notpicked] = partByIndex jj  xs ]
-        ---}
+group [] _ = []
+group _ [] = []
+group (size:sizes) xs = fmap (++) [] $ fmap f [] $ combinations (range 0 $ length xs -1) size
+    where
+        f [] = []
+        f jndexes = kept ++ group sizes remaining
+            where [kept, remaining] = partByIndex xs jndexes
+            
+--}
