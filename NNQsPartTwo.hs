@@ -59,7 +59,7 @@ combinations xs n = [ ys | ys <- powerset xs, length ys == n ]
 
 combo :: [a] -> Int -> [[a]]
 combo [] _ = []
-combo xs 0 = []
+combo xs 0 = [[]]
 combo xs 1 = fmap (\x -> [x]) xs
 combo (x:xs) n = [ x : ys | ys <- combo xs (n - 1) ] ++ combo xs n
 
@@ -165,3 +165,35 @@ group (size:sizes) xs = fmap (++) [] $ fmap f [] $ combinations (range 0 $ lengt
             where [kept, remaining] = partByIndex xs jndexes
             
 --}
+
+
+
+-- 31
+{-- isPrime --}
+isPrime :: Int -> Bool
+isPrime 1 = False
+isPrime 2 = True
+isPrime n = not $ or [ n `mod` x == 0 | x <- [ 2 .. n ], x * x < n ]
+
+
+-- 32
+{-- gcd' --}
+
+-- might not work right all/most of time either,
+-- at least it's shorter...
+gcd' :: Int -> Int -> Int
+gcd' a b    | a < 0         = gcd' (abs a) b
+            | b < 0         = gcd' a (abs b)
+            | b == 0        = a
+            | a < b         = gcd' b a
+            | otherwise     = gcd' (a `div` b) (a `rem` b)
+
+
+
+
+
+-- 33
+{-- coprime --}
+coprime :: Int -> Int -> Bool
+coprime n m = gcd' n m == 1
+
