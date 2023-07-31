@@ -1,5 +1,7 @@
 # shitty-haskell
 
+This is just me, trying to learn a little Haskell.
+
 
 
 # install with stack
